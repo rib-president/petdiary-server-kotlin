@@ -15,7 +15,7 @@ class File(
     @Column(name = "file_id")
     val fileId: Long? = null,
 
-    @Column(name = "location", length = 1024, nullable = false)
+    @Column(name = "`location`", length = 1024, nullable = false)
     @Comment("파일 저장 위치")
     var location: String,
 
@@ -23,7 +23,7 @@ class File(
     @Comment("파일명")
     var filename: String,
 
-    @Column(name = "key", length = 128, nullable = false)
+    @Column(name = "`key`", length = 128, nullable = false)
     @Comment("파일 식별키")
     var key: String
 )

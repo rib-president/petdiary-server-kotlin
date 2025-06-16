@@ -1,5 +1,6 @@
 package com.petdiary.domain.entity
 
+import com.petdiary.domain.enums.SnsType
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.Comment
@@ -19,9 +20,9 @@ class User (
     @Column(name = "user_id")
     val userId: Long? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sns_type_id", nullable = false)
-    @Comment("sns type FK")
+    @Column(name = "sns_type", length = 8, nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Comment("sns type")
     var snsType: SnsType,
 
     @Column(name = "sns_user_id", length = 64, nullable = false, unique = true)

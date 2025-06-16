@@ -1,5 +1,5 @@
 package com.petdiary.domain.enums
 
-enum class SnsName {
+enum class SnsType {
     NAVER, GOOGLE, KAKAO
 }
