@@ -47,11 +47,14 @@ subprojects {
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
         plugin("kotlin-spring")
+        plugin("kotlin-jpa")
     }
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-web")
+
+        implementation(kotlin("stdlib"))
 
         // serialization, deserialization
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -67,4 +70,8 @@ subprojects {
     tasks.test {
         useJUnitPlatform()
     }
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = false
 }
