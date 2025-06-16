@@ -44,7 +44,7 @@ class Pet (
     @Comment("생일")
     var birthDate: LocalDate,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_id")
     @Comment("썸네일 FK")
     var thumbnail: File
