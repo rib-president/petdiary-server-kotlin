@@ -1,0 +1,2837 @@
+openapi: 3.0.3
+info:  
+  title: Pet Diary platform API
+  description: pet diary platform api
+  version: 1.0.0
+tags:
+  - name: AUTH
+  - name: USER-ME
+  - name: USER
+  - name: PET    
+  - name: PHOTO
+  - name: DIARY
+  - name: RECORD
+  - name: CMS  
+  - name: SYSTEM  
+####################### [ PATH 시작 ] #######################
+paths:
+# AUTH API
+  /auth/social:
+    post:
+      tags:
+        - AUTH
+      summary: 소셜로그인
+      description: 가입정보 있으면 로그인, 없으면 회원가입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialRequestDto'
+      responses:
+        "201":
+          description: 회원가입 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialResponseDto'
+# USER-ME API
+  /user/me:
+    get:
+      tags:
+        - USER-ME
+      summary: 내 정보
+      description: 현재는 이름만 있음
+      responses:
+        "200":
+          description: 내 정보 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeResponseDto'
+    patch:
+      tags:
+        - USER-ME
+      summary: 내 정보 수정
+      description: 이름, 프로필 사진, 수신 동의 변경
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserMeUpdateRequestDto'
+      responses:
+        "200":
+          description: 내 정보 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'              
+  /user/me/withdraw:
+    post:
+      tags:
+        - USER-ME
+      summary: 회원 탈퇴
+      responses:
+        "200":
+          description: 회원 탈퇴 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+# USER API                
+  /user/families:    
+    get:
+      tags:
+        - USER
+      summary: 가족 목록
+      responses:
+        "200":
+          description: 가족 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/FamilyListResponseDto'
+  /user/families/{familyId}:
+    get:
+      tags:
+        - USER
+      summary: 가족 상세
+      description: 가족명, 댓글 허용 여부 보여줌
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 가족 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FamilyDetailResponseDto'
+    patch:
+      tags:
+        - USER
+      summary: 가족 수정
+      description: 가족명, 댓글 허용 여부 변경
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyUpdateRequestDto'
+      responses:
+        "200":
+          description: 가족 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+    delete:
+      tags:
+        - USER
+      summary: 가족 삭제  
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 가족 삭제 응답값 없음 
+  /user/families/{familyId}/groups/{groupId}/expel:
+    post:
+      tags:
+        - USER
+      summary: 가족 그룹 내 사용자 방출      
+      description: admin-가족 그룹 내 사용자 방출
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string            
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyGroupExpelRequestDto'
+      responses:
+        "200":
+          description: 가족 내 사용자 방출 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+  /user/families/{familyId}/groups/{groupId}/leave:
+    post:
+      tags:
+        - USER
+      summary: 가족 그룹에서 나가기
+      description: 일반사용자-가족에서 나가기
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string         
+      responses:
+        "200":
+          description: 가족 그룹에서 나가기 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'                                    
+  /user/families/{familyId}/groups/{groupId}/invite:
+    post:
+      tags:
+        - USER
+      summary: 가족으로 초대
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string                             
+      responses:
+        "200":
+          description: 가족으로 초대 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FamilyGroupInviteResponseDto'
+  /user/families/{familyId}/groups:
+    post:
+      tags:
+        - USER
+      summary: 가족 그룹 생성
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyGroupCreateRequestDto'
+      responses:
+        "201":
+          description: 가족 그룹 생성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+    get:
+      tags:
+        - USER
+      summary: 가족 그룹 목록
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 가족 그룹 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/FamilyGroupListResponseDto'  
+    patch:
+      tags:
+        - USER
+      summary: 가족 그룹 수정
+      description: 가족 그룹명 수정
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyGroupUpdateRequestDto'
+      responses:
+        "200":
+          description: 가족 그룹 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'              
+    delete:
+      tags:
+        - USER
+      summary: 가족 그룹 삭제
+      description: super admin만 가능
+      parameters:
+        - name: familyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 가족 그룹 삭제 응답값 없음
+  /user/family-group-users/{familyGroupUserId}:
+    get:
+      tags:
+        - USER
+      summary: 가족 그룹 사용자 상세 정보
+      parameters:        
+        - name: familyGroupUserId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string 
+      responses:
+        "200":
+          description: 가족 그룹 사용자 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FamilyGroupUserDetailResponseDto'                 
+    patch:
+      tags:
+        - USER
+      summary: 가족 그룹 사용자 정보 수정 & 그룹 관리자 이관 & 사용자 그룹 이동
+      description: admin이 아닐 경우 그룹 내 사용자명 변경, admin일 경우 그룹 내 사용자의 권한 변경 및 사용자 그룹 이동(super-admin)
+      parameters:      
+        - name: familyGroupUserId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FamilyGroupUserUpdateRequestDto'
+      responses:
+        "200":
+          description: 가족 그룹 사용자 정보 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+  /user/family-group-users/{familyGroupUserId}/permissions:
+    get:
+      tags:
+        - USER
+      summary: 가족 내 사용자 권한 목록
+      parameters:        
+        - name: familyGroupUserId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 가족 내 사용자 권한 목록 응답값
+          content:
+            application/json:
+              schema:        
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'      
+                  - $ref: '#/components/schemas/FamilyGroupUserPermissionListResponseDto'            
+# PET API
+  /pets:
+    post:
+      tags:
+        - PET
+      summary: 반려동물 생성
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetCreateRequestDto'
+      responses:
+        "201":
+          description: 반려동물 생성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+    get:
+      tags:
+        - PET
+      summary: 반려동물 목록
+      parameters:
+        - name: PetListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/PetListRequestDto"
+      responses:
+        "200":
+          description: 반려동물 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/PetListResponseDto'
+  /pets/{petId}:
+    get:
+      tags:
+        - PET
+      summary: 반려동물 상세
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 반려동물 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDetailResponseDto'
+    patch:
+      tags:
+        - PET
+      summary: 반려동물 수정
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetUpdateRequestDto'
+      responses:
+        "200":
+          description: 반려동물 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+    delete:
+      tags:
+        - PET
+      summary: 반려동물 정보 삭제
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 반려동물 정보 삭제 응답값 없음
+  /pets/breed-types:
+    get:
+      tags:
+        - PET
+      summary: 반려동물 품종 리스트
+      parameters:
+        - name: PetBreedTypeListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PetBreedTypeListRequestDto'
+      responses:
+        "200":
+          description: 반려동품 품종 리스트 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/PetBreedTypeListResponseDto'                                  
+# PHOTO API
+  /pets/{petId}/photo-groups:
+    post:
+      tags:
+        - PHOTO
+      summary: 사진 그룹 생성
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoGroupCreateRequestDto'
+      responses:
+        "201":
+          description: 사진 생성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+    get:
+      tags:
+        - PHOTO
+      summary: 사진 그룹 목록
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string            
+        - name: PhotoListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PhotoGroupListRequestDto'
+      responses:
+        "200":
+          description: 사진 그룹 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/PhotoGroupListResponseDto'                                          
+  /pets/{petId}/photos:
+    get:
+      tags:
+        - PHOTO
+      summary: 사진 목록
+      parameters:      
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: PhotoListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PhotoListRequestDto'
+      responses:
+        "200":
+          description: 사진 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/PhotoListResponseDto'
+  /pets/{petId}/photos/summary:
+    get:
+      tags:
+        - PHOTO
+      summary: 사진 summary
+      description: 총 사진 몇개 올렸는지, 최근 업로드한 개월
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 사진 summary 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoSummaryResponseDto'                            
+  /pets/{petId}/photos/{photoId}:
+    get:
+      tags:
+        - PHOTO
+      summary: 사진 상세
+      parameters:      
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: photoId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 사진 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoDetailResponseDto' 
+    patch:
+      tags:
+        - PHOTO
+      summary: 사진 수정
+      description: 대표사진, 사진 기록, 등록 기준일 변경
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: photoId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoUpdateRequestDto'
+      responses:
+        "200":
+          description: 사진 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'                                                                         
+  /pets/{petId}/photos/bulk-update:
+    post:
+      tags:
+        - PHOTO
+      summary: 사진 벌크 수정
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoBulkUpdateRequestDto'
+      responses:
+        "200":
+          description: 사진 벌크 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+  /pets/{petId}/photos/bulk-delete:                
+    post:
+      tags:
+        - PHOTO
+      summary: 사진 벌크 삭제
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoBulkDeleteRequestDto'
+      responses:
+        "200":
+          description: 사진 벌크 삭제 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+  /pets/{petId}/photos/{photoId}/like:
+    post:
+      tags:
+        - PHOTO
+      summary: 사진 좋아요
+      parameters:       
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string             
+        - name: photoId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 사진 좋아요 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoLikeResponseDto'
+  /pets/{petId}/photos/{photoId}/replies:
+    get:
+      tags:
+        - PHOTO
+      summary: 사진 댓글 목록
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string      
+        - name: photoId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string              
+      responses:
+        "200":
+          description: 사진 댓글 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/PhotoReplyListResponseDto'                              
+    post:
+      tags:
+        - PHOTO
+      summary: 사진 댓글 작성
+      parameters:      
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string          
+        - name: photoId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoReplyCreateRequestDto'
+      responses:
+        "200":
+          description: 사진 댓글 작성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+  /pets/{petId}/photos/{photoId}/replies/{replyId}:
+    delete:
+      tags:
+        - PHOTO
+      summary: 사진 댓글 삭제
+      parameters:      
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string           
+        - name: photoId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: replyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string                  
+      responses:
+        "204":
+          description: 사진 댓글 작성 응답값 없음
+# DIARY API
+  /diaries:
+    get:
+      tags:
+        - DIARY
+      summary: 일기 목록, limit=0 일 경우 summary 기능(총 total)
+      parameters:              
+        - name: DiaryListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/DiaryListRequestDto'
+      responses:
+        "200":
+          description: 일기 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/DiaryListResponseDto'
+    post:
+      tags:
+        - DIARY
+      summary: 일기 생성    
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaryCreateRequestDto'
+      responses:
+        "201":
+          description: 일기 생성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'  
+    patch:
+      tags:
+        - DIARY
+      summary: 일기 수정
+      parameters:             
+        - name: diaryId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaryUpdateRequestDto'                                                                                      
+      responses:
+        "200":
+          description: 일기 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'              
+    delete:
+      tags:
+        - DIARY
+      summary: 일기 삭제
+      parameters:              
+        - name: diaryId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 일기 삭제 응답값 없음
+  /diaries/{diaryId}/report:
+    post:
+      tags:
+        - DIARY
+      summary: 일기 신고
+      parameters:        
+        - name: diaryId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaryReportRequestDto'                                  
+      responses:
+        "200":
+          description: 일기 신고 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'              
+# RECORD API
+  /pets/{petId}/records:
+    get:
+      tags:
+        - RECORD
+      summary: 기록 목록
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: RecordListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/RecordListRequestDto'
+      responses:
+        "200":
+          description: 기록 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/RecordListResponseDto'
+    post:
+      tags:
+        - RECORD
+      summary: 기록 생성
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCreateRequestDto'
+      responses:
+        "201":
+          description: 기록 생성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+  /pets/{petId}/records/summary:
+    get:
+      tags:
+        - RECORD
+      summary: 기록 요약
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 기록 요약 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/RecordSummaryResponseDto'                              
+  /pets/{petId}/records/{recordId}:
+    get:
+      tags:
+        - RECORD
+      summary: 기록 상세
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 기록 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordDetailResponseDto'
+    patch:
+      tags:
+        - RECORD
+      summary: 기록 수정
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordUpdateRequestDto'
+      responses:
+        "200":
+          description: 기록 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'                                                      
+    delete:
+      tags:
+        - RECORD
+      summary: 기록 삭제
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 기록 삭제 응답값 없음
+# CMS API
+  /cms/board/{boardType}:
+    get:
+      tags:
+        - CMS
+      summary: 게시판 상세
+      description: 해당 게시판 관련 권한
+      parameters:
+        - name: boardType
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 게시판 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardDetailResponseDto'          
+  /cms/board/{boardType}/articles:
+    get:
+      tags:
+        - CMS
+      summary: 게시글 목록
+      parameters:
+        - name: boardType
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string      
+        - name: ArticleListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ArticleListRequestDto'            
+      responses:
+        "200":
+          description: 게시글 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/ArticleListResponseDto'
+    post:
+      tags:
+        - CMS
+      summary: 게시글 작성
+      parameters:
+        - name: boardType
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleCreateRequestDto'
+      responses:
+        "201":
+          description: 게시글 작성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+  /cms/board/{boardType}/articles/{articleId}:
+    get:
+      tags:
+        - CMS
+      summary: 게시글 상세
+      parameters:
+        - name: boardType
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string      
+        - name: articleId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 게시글 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleDetailResponseDto'
+    patch: 
+      tags:
+        - CMS
+      summary: 게시글 수정
+      parameters:
+        - name: boardType
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string      
+        - name: articleId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleUpdateRequestDto'            
+      responses:
+        "200":
+          description: 게시글 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'                     
+    delete:
+      tags:
+        - CMS
+      summary: 게시글 삭제
+      parameters:
+        - name: boardType
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string      
+        - name: articleId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 게시글 삭제 응답값 없음
+  /cms/banners:
+    get:
+      tags:
+        - CMS
+      summary: 배너 목록
+      parameters:
+        - name: BannerListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/BannerListRequestDto'
+      responses:
+        "200":
+          description: 배너 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/BannerListResponseDto'  
+    post:
+      tags:
+        - CMS
+      summary: 배너 생성
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BannerCreateRequestDto'
+      responses:
+        "201":
+          description: 배너 생성 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResponseDto'
+  /cms/banners/{bannerId}:
+    get:
+      tags:
+        - CMS
+      summary: 배너 상세
+      parameters:
+        - name: bannerId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 배너 상세 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BannerDetailResponseDto'              
+    patch:
+      tags:
+        - CMS
+      summary: 배너 수정
+      parameters:
+        - name: bannerId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BannerUpdateRequestDto'
+      responses:
+        "200":
+          description: 배너 수정 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+    delete:
+      tags:
+        - CMS
+      summary: 배너 삭제
+      parameters:
+        - name: bannerId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "204":
+          description: 배너 삭제 응답값 없음
+  /cms/banner-types:
+    get:
+      tags:
+        - CMS
+      summary: 배너 타입 목록
+      responses:
+        "200":
+          description: 배너 타입 목록 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/BannerTypeListResponseDto'                                                                 
+# SYSTEM API
+  /system/alarm-histories:
+    get:
+      tags:
+        - SYSTEM
+      summary: 알림 내역
+      parameters:
+        - name: AlarmHistoryListRequestDto
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AlarmHistoryListRequestDto'
+      responses:
+        "200":
+          description: 알림 내역 응답값
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ListItemResponseDto'
+                  - $ref: '#/components/schemas/AlarmHistoryListResponseDto'
+  /system/alarm-histories/{alarmHistoryId}/read:
+    post:
+      tags:
+        - SYSTEM
+      summary: 알림 읽기
+      parameters:
+        - name: alarmHistoryId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 알림 읽기 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDto'
+  /system/files/get-presigned-url:
+    post:
+      tags:
+        - SYSTEM
+      summary: 파일 presigned url 요청
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileUrlRequestDto'
+      responses:
+        "200":
+          description: 파일 presigned url 응답값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUrlResponseDto'
+  /system/files/{location}:
+    get:
+      tags:
+        - SYSTEM
+      summary: 파일 보기
+      parameters:
+        - name: location
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 응답값
+####################### [ PATH 끝 ] #######################
+
+
+
+####################### [ COMPONENT 시작 ] #######################
+components:
+  schemas:
+# COMMON DTO  
+    CreateResponseDto:
+      type: object
+      description: 생성 API 응답값
+      properties:
+        id:
+          type: string
+          description: 생성된 pk
+    SuccessResponseDto:
+      type: object
+      description: 요청 API 응답값
+      properties:
+        success:
+          type: boolean
+          description: 성공여부
+    ListItemResponseDto:
+      type: object
+      description: 목록 API 응답값
+      properties:
+        total:
+          type: number
+          description: 총 요소 개수
+        size:
+          type: number
+          description: 현재 페이지의 요소 개수
+        limit:
+          type: number
+          description: 한 페이지 최대 요소 개수
+        offset:
+          type: number
+          description: 현재 요소 오프셋
+# AUTH DTO          
+    SocialRequestDto:
+      type: object
+      properties:
+        snsType:
+          type: string
+          description: SNS type명(NAVER, GOOGLE, KAKAO)
+        authorizationCode:
+          type: string
+          description: 인가코드        
+        emailAddress:
+          type: string
+          description: 소셜 로그인 후 받은 이메일
+        inviteAuthenticationKey:
+          type: string
+          description: 초대로 가입하는 경우 초대 링크 인증키
+          nullable: true
+    SocialResponseDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: 반려일기용 액세스 토큰
+        idToken:
+          type: string
+          description: 반려일기 용 아이디 토큰
+        expiresIn:
+          type: number
+          description: 토큰 유효시간(초)
+# USER-ME DTO
+    UserMeResponseDto:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: 사용자 이름
+        emailAddress:
+          type: string
+          description: 이메일 주소
+        avatar:
+          type: object
+          description: 프로필 이미지
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기
+        snsType:
+          type: string
+          description: sns 타입
+        marketingAgreedDateTime:
+          type: string
+          description: 마케팅 수신 동의 시간
+    UserMeUpdateRequestDto:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: 사용자 이름
+        marketingAgreedDateTime:
+          type: string
+          description: 마케팅 수신 동의 시간
+        avatar:
+          type: object
+          description: 프로필 이미지
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기
+# USER DTO          
+    FamilyListResponseDto:
+      type: object
+      properties:
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: 가족 PK
+            name:
+              type: string
+              description: 가족명
+            isDefault:
+              type: boolean
+              description: 대표가족여부
+            superAdminName:
+              type: string
+              description: 관리자명
+            petThumbnailLocation:
+              type: string
+              description: 반려동물 썸네일 위치              
+    FamilyDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 가족 PK
+        name:
+          type: string
+          description: 가족명
+        isDefault:
+          type: boolean
+          description: 대표가족여부        
+        isAllowedReply:
+          type: boolean
+          description: 가족 그룹 사용자 댓글 허용 여부(슈퍼 관리자 제외)        
+    FamilyUpdateRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 가족명
+          nullable: true
+        isDefault:
+          type: boolean
+          description: 대표가족여부
+          nullable: true
+        isAllowedReply:
+          type: boolean
+          description: 가족 그룹 사용자 댓글 허용 여부(슈퍼 관리자 제외)
+          nullable: true
+    FamilyGroupCreateRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 가족 그룹 명
+        isDefault:  
+          type: boolean
+          description: 기본 그룹 여부
+    FamilyGroupListResponseDto:
+      type: object
+      properties:
+        items:  
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 가족 그룹 pk
+              name:
+                type: string
+                description: 가족 그룹명
+              isDefault:
+                type: boolean
+                description: 기본 그룹 여부
+              users:
+                type: array
+                description: 가족 그룹 사용자 리스트
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: 가족 그룹 사용자 PK
+                    isMe:
+                      type: boolean
+                      description: 현재 접속한 사용자인지 여부
+                    name:
+                      type: string
+                      description: 가족 그룹 내 이름
+                    isAdmin:
+                      type: boolean
+                      description: 관리자 여부
+                    avatarLocation:
+                      type: string
+                      description: 프로필 이미지 location  
+    FamilyGroupUpdateRequestDto:
+      type: object
+      properties:
+        name:
+          type: string    
+          description: 그룹명
+          nullable: true
+    FamilyGroupExpelRequestDto:
+      type: object
+      properties:
+        familyGroupUserId:
+          type: string
+          description: 방출할 가족 그룹 사용자 PK    
+    FamilyGroupUserDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string   
+          description: 가족 그룹 사용자 PK
+        familyGroupId:
+          type: string
+          description: 가족 그룹 pk
+        name:
+          type: string
+          description: 사용자명
+        groupName:
+          type: string
+          description: 소속된 그룹명
+        isAdmin:
+          type: boolean
+          description: 관리자 여부
+        hasPhotoWritePermission:
+          type: boolean
+          description: 사진 업로드 권한 소유 여부
+        hasRecordWritePermission:
+          type: boolean
+          description: 기록 입력 권한 소유 여부
+        avatarLocation:
+          type: string
+          description: 프로필 이미지 location
+    FamilyGroupUserUpdateRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 사용자명
+          nullable: true
+        hasPhotoWritePermission:
+          type: boolean
+          description: 사진 업로드 권한 소유 여부
+          nullable: true
+        hasRecordWritePermission:
+          type: boolean
+          description: 기록 입력 권한 소유 여부
+          nullable: true
+        targetGroupId:
+          type: string
+          description: 이동할 가족 그룹 PK
+          nullable: true
+    FamilyGroupUserPermissionListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 권한명               
+    FamilyGroupInviteResponseDto:
+      type: object
+      properties:
+        invitaionLink:
+          type: string
+          description: 초대 링크
+# PET DTO          
+    PetCreateRequestDto:
+      type: object
+      properties:
+        petType:
+          type: string
+          description: 반려동물 종류
+        breedName:
+          type: string
+          description: 품종명
+        gender:
+          type: string
+          description: 성별          
+        name:
+          type: string
+          description: 이름
+        birthDate:
+          type: string
+          description: 생년월일        
+        familyId:
+          type: string
+          description: 가족 pk
+    PetListRequestDto:
+      type: object
+      properties:
+        familyId:
+          type: string
+          description: 가족 PK
+    PetListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 반려동물 PK
+              name:
+                type: string
+                description: 이름
+              birthDate:
+                type: string
+                description: 생년월일
+              thumbnailLocation:
+                type: string
+                description: 프로필 이미지 location
+    PetDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 반려동물 PK
+        name:
+          type: string
+          description: 이름
+        gender:
+          type: string
+          description: 성별
+        birthDate:
+          type: string
+          description: 생년월일
+        petType:
+          type: string
+          description: 동물 타입
+        breedName:
+          type: string
+          description: 품종
+        thumbnail:
+          type: object
+          description: 프로필 이미지
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기             
+    PetUpdateRequestDto:
+      type: object
+      properties:        
+        name:
+          type: string
+          description: 이름
+          nullable: true
+        gender:
+          type: string
+          description: 성별
+          nullable: true
+        birthDate:
+          type: string
+          description: 생년월일
+          nullable: true
+        petType:
+          type: string
+          description: 동물 타입
+          nullable: true
+        breedName:
+          type: string
+          description: 품종
+          nullable: true
+        thumbnail:
+          type: object
+          description: 프로필 이미지
+          nullable: true
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기
+    PetBreedTypeListRequestDto:
+      type: object
+      properties:
+        petType:
+          type: string
+          description: 동물 종류
+    PetBreedTypeListResponseDto:
+      type: object
+      properties:
+        itmes:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 품종 리스트
+# PHOTO DTO
+    PhotoGroupCreateRequestDto:
+      type: object
+      properties:
+        notedDate:
+          type: string
+          description: 등록 기준일
+        images:
+          type: array
+          description: 이미지 리스트
+          items:
+            type: object            
+            properties:
+              key:
+                type: string
+                description: 파일 키
+              location:
+                type: string
+                description: 파일 위치
+              filename:
+                type: string
+                description: 파일명
+              size:
+                type: number
+                description: 파일 크기
+              description:
+                type: string
+                description: 사진 기록
+                nullable: true
+              keywords:
+                type: array
+                description: 키워드 리스트
+                nullable: true
+                items:
+                  type: string
+              sharedFamilyGroupIds:
+                type: array
+                description: 공유할 가족 그룹 아이디 리스트
+                items:
+                  type: string
+    PhotoGroupListRequestDto:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: 조회 시작일
+        endDate:
+          type: string
+          description: 조회 종료일
+    PhotoGroupListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 사진 그룹 PK
+              notedDate:
+                type: string
+                description: 등록 기준일
+              thumbnailLocation:
+                type: string         
+                description: 사진 썸네일 location
+    PhotoListRequestDto:
+      type: object
+      properties:
+        photoGroupId:
+          type: string          
+          description: 사진 그룹 PK
+        startDate:
+          type: string
+          description: 조회 시작일
+        endDate:
+          type: string
+          description: 조회 종료일
+        hasDescription:
+          type: string
+          description: 기록 보유 여부
+        hasLike:
+          type: boolean
+          description: 좋아요 보유 여부
+        isDefault:
+          type: boolean
+          description: 대표사진 여부
+        keyword:
+          type: string
+          description: 키워드
+    PhotoListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 사진 PK
+              notedDate:
+                type: string
+                description: 등록 기준일
+              isDefault:
+                type: boolean
+                description: 대표 사진 여부
+              description:
+                type: string
+                description: 사진 기록
+                nullable: true
+              likeCount:
+                type: number
+                description: 좋아요 개수
+              replyCount:
+                type: number
+                description: 댓글 개수
+              keyword:
+                type: array
+                description: 키워드
+                nullable: true
+                items:
+                  type: string
+              location:
+                type: string
+                description: 사진 location
+    PhotoSummaryResponseDto:
+      type: object
+      properties:
+        total:
+          type: number
+          description: 총 개수
+        likeCount:
+          type: number
+          description: 좋아요 개수
+        defaultCount:
+          type: number
+          description: 대표사진 개수
+        lastUploadYearMonths:
+          type: array
+          description: 최근 업로드한 년-월 리스트(yyyy-MM)
+          items:
+            type: string
+    PhotoDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 사진 PK
+        uploader:
+          type: string
+          description: 사진 업로더 이름
+        sharedFamilyGroupNames:
+          type: array
+          description: 공유 가족 그룹 리스트
+          items:
+            type: string
+        isDefault:
+          type: boolean
+          description: 대표사진 여부
+        likeCount:
+          type: number
+          description: 좋아요 개수
+        replyCount:
+          type: number
+          description: 댓글 개수
+        readCount:
+          type: number
+          description: 조회수
+        description:  
+          type: string
+          description: 사진 기록
+          nullable: true
+        keywords:
+          type: array
+          description: 키워드 리스트
+          items:
+            type: string
+        file:
+          type: object
+          description: 파일
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 저장 위치
+            filename:
+              type: string
+              description: 파일 명
+            size:
+              type: number
+              description: 파일크기
+        sharedFamilyGroupIds:
+          type: array
+          description: 공유그룹 pk 리스트
+          items:
+            type: string
+        isMine:
+          type: boolean
+          description: 내가 업로드한 사진인지
+        isLiked:
+          type: boolean
+          description: 내가 좋아요한 사진인지
+    PhotoUpdateRequestDto:
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+          description: 대표 사진으로 변경 여부
+          nullable: true
+        description:
+          type: string
+          description: 사진 기록
+          nullable: true
+        notedDate:
+          type: string
+          description: 등록 기준일
+          nullable: true
+    PhotoBulkDeleteRequestDto:
+      type: object
+      properties:
+        ids:
+          type: array
+          description: 사진 PK 리스트
+          items:
+            type: string
+    PhotoBulkUpdateRequestDto:
+      type: object
+      properties:
+        ids:
+          type: array
+          description: 사진 PK 리스트
+          items:
+            type: string
+        sharedFamilyGroupIds:
+          type: array
+          description: 공유 가족 그룹 PK 리스트
+          items:
+            type: string
+        keywords:
+          type: array
+          description: 키워드 리스트
+          items:
+            type: string  
+    PhotoLikeResponseDto:
+        type: object
+        properties:
+          isLiked:
+            type: boolean
+            description: 좋아요인지 여부(true - 좋아요, false - 해제)
+          count:
+            type: number
+            description: 좋아요 개수
+    PhotoReplyListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 댓글 pk
+              author:
+                type: string
+                description: 작성자
+              creationDateTime:
+                type: string
+                description: 작성일
+              comment:
+                type: string
+                description: 댓글 내용
+              familyGroupName:
+                type: string
+                description: 작성자 소속 가족 그룹명
+              avatarLocation:
+                type: string
+                description: 작성자 아바타 location
+              isMine:
+                type: boolean
+                description: 내가 쓴 댓글인지 여부
+    PhotoReplyCreateRequestDto:
+      type: object
+      properties:
+        comment:
+          type: string 
+          description: 댓글 내용
+# DIARY DTO
+    DiaryListRequestDto:
+      type: object
+      properties:
+        petId:
+          type: string
+          description: 반려동물 PK
+        startDate:
+          type: string
+          description: 조회 시작일
+        endDate:
+          type: string
+          description: 조회 종료일
+        isMine:
+          type: boolean
+          description: 내 일기만 조회 여부
+        isPeer:
+          type: boolean
+          description: 비슷한 연령만 조회 여부
+    DiaryListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 일기 pk
+              emotionLevel:
+                type: number
+                description: 기분 정도, 1-나쁨 ~ 5-좋음
+              author:
+                type: string
+                description: 작성자명
+              notedDate:
+                type: string
+                description: 등록기준일
+              content:
+                type: string
+                description: 내용
+              dayOfBirth:
+                type: number
+                description: 생후 경과일(ex. D+1, D+3)
+              isPrivate:
+                type: boolean
+                description: 비밀글 여부
+              isMine:
+                type: boolean
+                description: 내가 쓴 일기인지 여부
+    DiaryCreateRequestDto:
+      type: object
+      properties:
+        petId:
+          type: string
+          description: 반려동물 PK
+        notedDate:
+          type: string
+          description: 등록 기준일
+        content:
+          type: string
+          description: 일기 내용
+        isPrivate:
+          type: boolean
+          description: 비밀글 여부
+        emotionLevel:
+          type: number
+          description: 기분 정도, 1-나쁨 ~ 5-좋음    
+    DiaryUpdateRequestDto:
+      type: object
+      properties:
+        emotionLevel:
+          type: string
+          description: 기분 정도, 1-나쁨 ~ 5-좋음
+          nullable: true
+        content:
+          type: string
+          description: 일기 내용
+          nullable: true
+        isPrivate:
+          type: boolean
+          description: 비밀글 여부
+          nullable: true
+        notedDate:
+          type: string
+          description: 등록기준일
+          nullable: true          
+    DiaryReportRequestDto:
+      type: object
+      properties:
+        reportType:
+          type: string
+          description: 신고 사유 타입
+# RECORD DTO
+    RecordListRequestDto:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: 조회 시작일
+        endDate:
+          type: string
+          description: 조회 종료일
+    RecordListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 기록 PK
+              creationDateTime:
+                type: string
+                description: 기록 시작 시간
+              endDateTime:
+                type: string
+                description: 기록 종료 시간
+              category:
+                type: string
+                description: 기록 카테고리
+              name:
+                type: string
+                description: 기록명
+              memo:
+                type: string
+                description: 메모
+                nullable: true
+              measurement:
+                type: string
+                description: 측정값
+                nullable: true
+    RecordCreateRequestDto:
+      type: object
+      properties:
+        category:
+          type: string
+          description: 기록 카테고리    
+        creationDateTime:
+          type: string
+          description: 기록 시간
+          nullable: true
+        memo:
+          type: string
+          description: 메모
+          nullable: true        
+        measurement:
+          type: string
+          description: 측정값
+          nullable: true
+        meal:
+          type: object
+          description: 식사 카테고리 관련 값
+          nullable: true 
+          properties:
+            foodName:
+              type: string
+              description: 먹이종류              
+        defecation:
+          type: object
+          description: 배변 카테고리 관련 값
+          nullable: true
+          properties:
+            isPoop:
+              type: boolean
+              description: 응가여부              
+            isPee:
+              type: boolean
+              description: 쉬야여부
+        stroll:
+          type: object
+          description: 산책 카테고리 관련 값
+          nullable: true
+          properties:            
+            location:
+              type: string
+              description: 산책장소              
+        endDateTime:
+          type: string
+          description: 기록 종료시간
+          nullable: true                         
+    RecordSummaryResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          description: 기록 요약 리스트
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                description: 카테고리
+              measurement:
+                type: string
+                description: 측정값
+    RecordDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 기록 PK
+        creationDateTime:
+          type: string
+          description: 기록 시간
+        memo:
+          type: string
+          description: 메모
+        category:
+          type: string
+          description: 카테고리
+        measurement:
+          type: string
+          description: 측정값
+        meal:
+          type: object
+          description: 식사 카테고리 관련 값
+          nullable: true 
+          properties:
+            foodName:
+              type: string
+              description: 먹이종류              
+        defecation:
+          type: object
+          description: 배변 카테고리 관련 값
+          nullable: true
+          properties:
+            isPoop:
+              type: boolean
+              description: 응가여부              
+            isPee:
+              type: boolean
+              description: 쉬야여부
+        stroll:
+          type: object
+          description: 산책 카테고리 관련 값
+          nullable: true
+          properties:            
+            location:
+              type: string
+              description: 산책장소            
+        endDateTime:
+          type: string
+          description: 기록 종료시간        
+    RecordUpdateRequestDto:
+      type: object
+      properties:
+        creationDateTime:
+          type: string
+          description: 기록 시간
+          nullable: true
+        memo:
+          type: string
+          description: 메모
+          nullable: true        
+        measurement:
+          type: string
+          description: 측정값
+          nullable: true
+        meal:
+          type: object
+          description: 식사 카테고리 관련 값
+          nullable: true 
+          properties:
+            foodName:
+              type: string
+              description: 먹이종류              
+        defecation:
+          type: object
+          description: 배변 카테고리 관련 값
+          nullable: true
+          properties:
+            isPoop:
+              type: boolean
+              description: 응가여부              
+            isPee:
+              type: boolean
+              description: 쉬야여부
+        stroll:
+          type: object
+          description: 산책 카테고리 관련 값
+          nullable: true
+          properties:            
+            location:
+              type: string
+              description: 산책장소            
+        endDateTime:
+          type: string
+          description: 기록 종료시간
+          nullable: true        
+# CMS DTO
+    BoardDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 게시판 PK
+        permissions:
+          type: array
+          description: 사용자가 게시판에 대해 갖고 있는 권한 리스트
+          items:
+            type: string
+    ArticleListRequestDto:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: 검색 키워드
+    ArticleListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string   
+                description: 게시글 PK
+              title:
+                type: string
+                description: 제목
+              author:
+                type: string
+                description: 작성자
+              creationDateTime:
+                type: string
+                description: 작성일
+    ArticleCreateRequestDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 제목
+        content:
+          type: string
+          description: 내용
+        file:
+          type: object
+          description: 파일
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 저장 위치
+            filename:
+              type: string
+              description: 파일 명
+            size:
+              type: number
+              description: 파일크기          
+    ArticleDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string                                     
+          description: 게시글 PK
+        boardType:
+          type: string
+          description: 게시판 타입
+        title:
+          type: string
+          description: 제목
+        content:
+          type: string
+          description: 내용
+        creationDateTime:
+          type: string
+          description: 작성일
+        file:
+          type: object
+          description: 파일
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 저장 위치
+            filename:
+              type: string
+              description: 파일 명
+            size:
+              type: number
+              description: 파일크기          
+    ArticleUpdateRequestDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 제목
+        content:
+          type: string
+          description: 내용
+        file:
+          type: object
+          description: 파일
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 저장 위치
+            filename:
+              type: string
+              description: 파일 명
+            size:
+              type: number
+              description: 파일크기          
+    BannerListRequestDto:
+      type: object
+      properties:
+        page:
+          type: string
+          description: 페이지명
+        startDatetime:
+          type: string
+          description: 게시 시작 시간
+        endDatetime:
+          type: string
+          description: 게시 종료 시간
+    BannerListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 배너 PK
+              page:
+                type: string
+                description: 페이지명
+              location:
+                type: string
+                description: 게시될 위치
+              width:
+                type: number
+                description: 가로
+              height:
+                type: number
+                description: 높이
+              order:
+                type: number
+                description: 순서
+              link:
+                type: string
+                description: 링크                        
+              imageLocation:
+                type: string
+                description: 이미지 location
+    BannerCreateRequestDto:
+      type: object
+      properties:
+        page:
+          type: string
+          description: 페이지명
+        location:
+          type: string
+          description: 게시될 위치
+        order:
+          type: number
+          description: 순서
+        link:
+          type: string
+          description: 링크
+        postStartDatetime:
+          type: string
+          description: 게시 시작 시간
+        postEndDatetime:
+          type: string
+          description: 게시 종료 시간          
+        image:
+          type: object
+          description: 이미지
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기
+    BannerDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 배너 PK
+        page:
+          type: string
+          description: 페이지명
+        location:
+          type: string
+          description: 게시될 위치
+        width:
+          type: number
+          description: 가로
+        height:
+          type: number
+          description: 높이
+        order:
+          type: number
+          description: 순서
+        link:
+          type: string
+          description: 링크
+        postStartDatetime:
+          type: string
+          description: 게시 시작 시간
+        postEndDatetime:
+          type: string
+          description: 게시 종료 시간                
+        image:
+          type: object
+          description: 이미지
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기        
+    BannerUpdateRequestDto:
+      type: object
+      properties:
+        page:
+          type: string
+          description: 페이지명
+          nullable: true
+        location:
+          type: string
+          description: 게시될 위치        
+          nullable: true
+        order:
+          type: number
+          description: 순서
+          nullable: true
+        link:
+          type: string
+          description: 링크
+          nullable: true
+        postStartDatetime:
+          type: string
+          description: 게시 시작 시간
+          nullable: true
+        postEndDatetime:
+          type: string
+          description: 게시 종료 시간                
+          nullable: true
+        image:
+          type: object
+          description: 이미지
+          nullable: true
+          properties:
+            key:
+              type: string
+              description: 파일 키
+            location:
+              type: string
+              description: 파일 위치
+            filename:
+              type: string
+              description: 파일명
+            size:
+              type: number
+              description: 파일 크기        
+    BannerTypeListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:              
+              page:
+                type: string
+                description: 페이지명          
+              locations:
+                type: array                
+                description: 게시될 위치 리스트
+                items:
+                  type: string
+# SYSTEM DTO
+    AlarmHistoryListRequestDto:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: 조회 시작일
+        endDate:
+          type: string
+          description: 조회 종료일
+    AlarmHistoryListResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: 알림 내역 PK        
+              type:
+                type: string
+                description: 알림 타입
+              title:
+                type: string
+                description: 알림 제목
+              content:
+                type: string
+                description: 알림 내용
+              params:
+                type: string
+                description: 알람 클릭했을 때 액션 json stringfy값, 첫번째값이 thumbnail image id
+              isRead:
+                type: boolean
+                description: 읽음 여부
+              creationDateTime:
+                type: string
+                description: 생성일 
+    FileUrlRequestDto:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: 파일명
+    FileUrlResponseDto:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 파일 키
+        location:
+          type: string
+          description: 파일 위치
+        filename:
+          type: string
+          description: 파일명
+        size:
+          type: number
+          description: 파일 크기
