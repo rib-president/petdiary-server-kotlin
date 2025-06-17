@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":domain-pet"))
     implementation(project(":domain-photo"))
     implementation(project(":domain-diary"))
+    implementation(project(":domain-record"))
     implementation(project(":domain-system"))
 }
 
