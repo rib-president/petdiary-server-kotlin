@@ -5,6 +5,7 @@ springBoot {
 }
 
 dependencies {
+    implementation(project(":client-core"))
     implementation(project(":domain-user"))
     implementation(project(":domain-pet"))
     implementation(project(":domain-photo"))
