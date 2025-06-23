@@ -22,17 +22,27 @@ class JwtProvider (
 
     @Value("\${jwt.expire-time}")
     private val expireTime: Long,
+    @Value("\${jwt.refresh-expire-time}")
+    private val refreshExpireTime: Long,
 
     private val userDetailsService: UserDetailsService
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret))
 
-    fun issueToken(userId: Long): String {
+    fun getAccessToken(userId: String): String {
+        return this.issueToken(userId, expireTime)
+    }
+
+    fun getRefreshToken(userId: String): String {
+        return this.issueToken(userId, refreshExpireTime)
+    }
+
+    fun issueToken(userId: String, expireTime: Long): String {
         val now = Date()
         val expiry = Date(now.time + expireTime)    // 3 hours
 
         return Jwts.builder()
-            .subject(userId.toString())
+            .subject(userId)
             .issuer(issuer)
             .issuedAt(now)
             .expiration(expiry)
