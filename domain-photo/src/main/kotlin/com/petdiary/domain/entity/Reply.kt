@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 class Reply (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val replyId: Long? = null,
+    var replyId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", nullable = false)
@@ -34,5 +34,5 @@ class Reply (
     @Column(name = "creation_date_time")
     @CreationTimestamp
     @Comment("등록 일시")
-    var creationDateTime: LocalDateTime
+    var creationDateTime: LocalDateTime? = null
 )

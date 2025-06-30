@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 class Banner (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val bannerId: Long? = null,
+    var bannerId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "banner_type_id", nullable = false)

@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 class AlarmHistory (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val alarmHistoryId: Long? = null,
+    var alarmHistoryId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -27,19 +27,19 @@ class AlarmHistory (
     @Enumerated(EnumType.STRING)
     @Column(name = "alarm_type", nullable = false, length = 32)
     @Comment("알람 타입")
-    var alarmType: AlarmType,
+    val alarmType: AlarmType,
 
     @Column(name = "title", nullable = false, length = 32)
     @Comment("알림 제목")
-    var title: String,
+    val title: String,
 
     @Column(name = "description", nullable = false, length = 64)
     @Comment("알림 내용")
-    var description: String,
+    val description: String,
 
     @Column(name = "params", length = 256)
     @Comment("알람 클릭했을 때 액션 json stringfy값, 첫번째값이 thumbnail image id")
-    var params: String,
+    val params: String,
 
     @Column(name = "is_read", nullable = false)
     @ColumnDefault("0")
@@ -49,5 +49,5 @@ class AlarmHistory (
     @Column(name = "creation_date_time", nullable = false)
     @CreationTimestamp
     @Comment("생성시간")
-    var creationDateTime: LocalDateTime
+    var creationDateTime: LocalDateTime? = null
 )

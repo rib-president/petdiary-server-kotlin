@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate
 class Meal (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val mealId: Long? = null,
+    var mealId: Long? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id", nullable = false, unique = true)

@@ -13,10 +13,10 @@ import org.hibernate.annotations.DynamicUpdate
 class Board (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val boardId: Long? = null,
+    var boardId: Long? = null,
 
     @Column(name = "type", nullable = false, unique = true)
     @Comment("게시판 타입")
     @Enumerated(EnumType.STRING)
-    var type: BoardType
+    val type: BoardType
 )

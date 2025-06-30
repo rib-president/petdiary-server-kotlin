@@ -17,7 +17,7 @@ class FamilyGroupUser (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "family_group_user_id")
-    val familyGroupUserId: Long? = null,
+    var familyGroupUserId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_group_id", nullable = false)
@@ -35,17 +35,17 @@ class FamilyGroupUser (
 
     @Column(name = "photo_upload_alarm_agreed_date_time")
     @Comment("사진 업로드 알림 허용 일시")
-    var photoUploadAlarmAgreedDateTime: LocalDateTime,
+    var photoUploadAlarmAgreedDateTime: LocalDateTime? = null,
 
     @Column(name = "photo_reply_alarm_agreed_date_time")
     @Comment("사진 댓글 알림 허용 일시")
-    var photoReplyAlarmAgreedDateTime: LocalDateTime,
+    var photoReplyAlarmAgreedDateTime: LocalDateTime? = null,
 
     @Column(name = "alarm_start_hour")
     @Comment("지정된 알림 시작 시간 0~24")
-    var alarmStartHour: Integer,
+    var alarmStartHour: Integer? = null,
 
     @Column(name = "alarm_end_hour")
     @Comment("지정된 알림 끝 시간 0~24")
-    var alarmEndHour: Integer
+    var alarmEndHour: Integer? = null
 )

@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate
 class Weight (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val weightId: Long? = null,
+    var weightId: Long? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id", nullable = false, unique = true)

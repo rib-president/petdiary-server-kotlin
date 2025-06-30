@@ -16,12 +16,12 @@ import org.hibernate.annotations.DynamicUpdate
 class BreedType (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val breedTypeId: Long? = null,
+    var breedTypeId: Long? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pet_type", nullable = false, length = 8)
     @Comment("반려동물 타입")
-    var petType: PetType,
+    val petType: PetType,
 
     @Column(name = "name", length = 16, nullable = false)
     @Comment("품종명 ex)코리안숏헤어, 시바")

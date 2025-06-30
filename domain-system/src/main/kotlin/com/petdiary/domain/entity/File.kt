@@ -13,17 +13,17 @@ class File(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")
-    val fileId: Long? = null,
+    var fileId: Long? = null,
 
     @Column(name = "`location`", length = 1024, nullable = false)
     @Comment("파일 저장 위치")
-    var location: String,
+    val location: String,
 
     @Column(name = "filename", length = 128, nullable = false)
     @Comment("파일명")
-    var filename: String,
+    val filename: String,
 
     @Column(name = "`key`", length = 128, nullable = false)
     @Comment("파일 식별키")
-    var key: String
+    val key: String
 )

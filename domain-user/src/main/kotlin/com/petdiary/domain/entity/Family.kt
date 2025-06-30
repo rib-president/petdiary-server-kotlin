@@ -14,7 +14,7 @@ class Family (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "family_id")
-    val familyId: Long? = null,
+    var familyId: Long? = null,
 
     @Column(name = "name", length = 16, nullable = false)
     @Comment("이름")

@@ -14,7 +14,7 @@ class FamilyGroup (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "family_group_id")
-    val familyGroupId: Long? = null,
+    var familyGroupId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id", nullable = false)

@@ -17,7 +17,7 @@ import java.time.LocalDate
 class Diary (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val diaryId: Long? = null,
+    var diaryId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)

@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class Photo (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val photoId: Long? = null,
+    var photoId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_group_id", nullable = false)
@@ -36,7 +36,7 @@ class Photo (
     var file: File,
 
     @Column(name = "keyword", length = 64)
-    @Comment("키워트(,로 연결)")
+    @Comment("키워드(,로 연결)")
     var keyword: String,
 
     @Column(name = "description", length = 128)
@@ -46,7 +46,7 @@ class Photo (
     @Column(name = "read_count", nullable = false)
     @ColumnDefault("0")
     @Comment("조회수")
-    var readCount: Integer,
+    var readCount: Integer = 0 as Integer,
 
     @Column(name = "is_default", nullable = false)
     @ColumnDefault("0")
@@ -56,5 +56,5 @@ class Photo (
     @Column(name = "creation_date_time", nullable = false)
     @CreationTimestamp
     @Comment("등록일")
-    var creationDateTime: LocalDateTime
+    var creationDateTime: LocalDateTime? = null
 )

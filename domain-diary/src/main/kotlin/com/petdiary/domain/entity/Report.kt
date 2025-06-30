@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate
 class Report (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val reportId: Long? = null,
+    var reportId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -28,5 +28,5 @@ class Report (
     @Column(name = "report_type", nullable = false)
     @Enumerated(EnumType.STRING)
     @Comment("신고타입")
-    var reportType: ReportType
+    val reportType: ReportType
 )

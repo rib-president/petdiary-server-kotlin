@@ -16,7 +16,7 @@ import java.time.LocalDate
 class PhotoGroup (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val photoGroupId: Long? = null,
+    var photoGroupId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)

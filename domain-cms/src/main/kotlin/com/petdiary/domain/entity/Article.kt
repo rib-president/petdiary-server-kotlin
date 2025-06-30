@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 class Article (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val articleId: Long? = null,
+    var articleId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
@@ -37,5 +37,5 @@ class Article (
     @Column(name = "creation_date_time", nullable = false)
     @CreationTimestamp
     @Comment("작성일")
-    var creationDateTime: LocalDateTime
+    var creationDateTime: LocalDateTime? = null
 )

@@ -14,12 +14,12 @@ import java.time.LocalDateTime
 class Record (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val recordId: Long? = null,
+    var recordId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
     @Comment("반려동물 FK")
-    var pet: Pet,
+    val pet: Pet,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)

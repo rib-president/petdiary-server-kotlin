@@ -15,7 +15,7 @@ import java.time.LocalDate
 class Pet (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val petId: Long? = null,
+    var petId: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id", nullable = false)
@@ -47,5 +47,5 @@ class Pet (
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_id")
     @Comment("썸네일 FK")
-    var thumbnail: File
+    var thumbnail: File? = null
 )

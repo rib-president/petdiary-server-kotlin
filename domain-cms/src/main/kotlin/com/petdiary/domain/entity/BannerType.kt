@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate
 class BannerType (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val bannerTypeId: Long? = null,
+    var bannerTypeId: Long? = null,
 
     @Column(name = "page", length = 32, nullable = false)
     @Comment("게시할 페이지(MAIN, MYPAGE)")

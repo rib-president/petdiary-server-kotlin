@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate
 class Defecation (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val defecationId: Long? = null,
+    var defecationId: Long? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id", nullable = false, unique = true)

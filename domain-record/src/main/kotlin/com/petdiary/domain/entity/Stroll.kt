@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 class Stroll (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val strollId: Long? = null,
+    var strollId: Long? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id", nullable = false, unique = true)
