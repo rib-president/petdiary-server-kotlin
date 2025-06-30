@@ -2,6 +2,7 @@ package com.petdiary.client.core.filter
 
 import com.petdiary.client.core.provider.JwtProvider
 import com.petdiary.client.core.redis.RefreshTokenRepository
+import jakarta.security.auth.message.AuthException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -32,7 +33,7 @@ class InitializeFilter (private val jwtProvider: JwtProvider,
                     val userId = jwtProvider.getClaims(accessToken).subject
                     val refreshToken = refreshTokenRepository.findByUserId(userId)?.token
                     refreshToken?.let { jwtProvider.getAccessToken(userId) }
-                        ?: throw BadCredentialsException("expired token")
+                        ?: throw AuthException("expired token")
                 }
             }
 

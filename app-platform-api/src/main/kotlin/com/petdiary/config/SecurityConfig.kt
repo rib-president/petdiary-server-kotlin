@@ -1,6 +1,7 @@
 package com.petdiary.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.petdiary.client.core.filter.InitializeFilter
 import com.petdiary.client.core.handler.CustomAccessDeniedHandler
 import com.petdiary.client.core.handler.CustomAuthenticationEntryPoint
 import com.petdiary.client.core.provider.JwtProvider
@@ -24,6 +25,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
@@ -51,8 +53,14 @@ class SecurityConfig(private val jwtProvider: JwtProvider,
                     }
                     .successHandler(customSuccessHandler())
             }
+            .addFilterBefore(initializeFilter(), UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
+    }
+
+    @Bean
+    fun initializeFilter(): InitializeFilter {
+        return InitializeFilter(jwtProvider, refreshTokenRepository)
     }
 
     @Bean
