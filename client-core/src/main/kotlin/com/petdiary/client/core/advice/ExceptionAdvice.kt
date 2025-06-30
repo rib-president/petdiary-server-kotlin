@@ -13,7 +13,7 @@ class ExceptionAdvice {
     fun handleAll(ex: Exception): ProblemDetail {
         val problem = ProblemDetail.forStatusAndDetail(
             HttpStatus.INTERNAL_SERVER_ERROR,
-            ex.message ?: "서버 오류 발생"
+            ex.message ?: "INTERNAL_SERVER_ERROR"
         )
         problem.title = "Internal Server Error"
         problem.setProperty("exception", ex.javaClass.simpleName)
