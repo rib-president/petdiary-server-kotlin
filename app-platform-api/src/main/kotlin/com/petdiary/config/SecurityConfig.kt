@@ -6,7 +6,10 @@ import com.petdiary.client.core.handler.CustomAuthenticationEntryPoint
 import com.petdiary.client.core.provider.JwtProvider
 import com.petdiary.client.core.redis.RefreshToken
 import com.petdiary.client.core.redis.RefreshTokenRepository
+import com.petdiary.domain.entity.User
+import com.petdiary.domain.enums.SnsType
 import com.petdiary.security.CustomOAuth2User
+import com.petdiary.security.repository.SecurityRepository
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
@@ -26,7 +29,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 class SecurityConfig(private val jwtProvider: JwtProvider,
     private val refreshTokenRepository: RefreshTokenRepository,
-    private val objectMapper: ObjectMapper) {
+    private val objectMapper: ObjectMapper,
+    private val securityRepository: SecurityRepository) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -58,13 +62,21 @@ class SecurityConfig(private val jwtProvider: JwtProvider,
             val oAuth2User = delegate.loadUser(userRequest)
 
             // 사용자 정보 가공
+            // TODO: 카카오 아닌 경우도 처리 필요
             val attributes = oAuth2User.attributes
             val email = (attributes["kakao_account"] as? Map<*, *>)?.get("email") as? String?: ""
 
-            // TODO: 사용자 등록 또는 조회 로직
-            // val user = userRepository.findOrCreate(email)
-            // val userId = user.userId
-            val userId = ""
+            val user = securityRepository.findByEmailAddress(email)
+                ?: securityRepository.save(User(
+                    systemCode = "",
+                    snsType = SnsType.KAKAO,
+                    snsUserId = email,
+                    avatar = null,
+                    marketingAgreedDateTime = null,
+                    displayName = "",
+                    emailAddress = email
+                ))
+            val userId = user.systemCode
 
             CustomOAuth2User(oAuth2User, email, userId)
         }

@@ -36,11 +36,11 @@ class User (
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "avatar_id")
     @Comment("아바타 FK")
-    var avatar: File,
+    var avatar: File?,
 
     @Column(name = "marketing_agreed_date_time")
     @Comment("마케팅 정보 수신 동의 시간")
-    var marketingAgreedDateTime: LocalDateTime,
+    var marketingAgreedDateTime: LocalDateTime?,
 
     @Column(name = "display_name", length = 16, nullable = false)
     @Comment("사용자명")
@@ -53,11 +53,11 @@ class User (
     @Column(name = "creation_date_time", nullable = false)
     @CreationTimestamp
     @Comment("등록일")
-    var creationDateTime: LocalDateTime,
+    var creationDateTime: LocalDateTime? = null,
 
     @Column(name = "updated_date_time", nullable = false)
     @ColumnDefault("NOW(6)")
     @UpdateTimestamp
     @Comment("수정일")
-    var updatedDateTime: LocalDateTime
+    var updatedDateTime: LocalDateTime? = null
 )
