@@ -20,6 +20,10 @@ class User (
     @Column(name = "user_id")
     val userId: Long? = null,
 
+    @Column(name = "system_code", length = 11, nullable = false, unique = true)
+    @Comment("사용자 고유 코드")
+    val systemCode: String,
+
     @Column(name = "sns_type", length = 8, nullable = false)
     @Enumerated(EnumType.STRING)
     @Comment("sns type")
