@@ -1,5 +1,8 @@
 package com.petdiary.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.petdiary.client.core.handler.CustomAccessDeniedHandler
+import com.petdiary.client.core.handler.CustomAuthenticationEntryPoint
 import com.petdiary.client.core.provider.JwtProvider
 import com.petdiary.client.core.redis.RefreshToken
 import com.petdiary.client.core.redis.RefreshTokenRepository
@@ -22,7 +25,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(private val jwtProvider: JwtProvider,
-    private val refreshTokenRepository: RefreshTokenRepository) {
+    private val refreshTokenRepository: RefreshTokenRepository,
+    private val objectMapper: ObjectMapper) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -32,6 +36,10 @@ class SecurityConfig(private val jwtProvider: JwtProvider,
                 it.requestMatchers("/", "/favicon.ico", "/v1/auth/login", "/oauth2/**").permitAll()
                     .anyRequest().authenticated()
             }
+            .exceptionHandling { exceptionHandling ->
+                exceptionHandling
+                    .authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper))
+                    .accessDeniedHandler(CustomAccessDeniedHandler(objectMapper))}
             .oauth2Login { oauth ->
                 oauth
                     .userInfoEndpoint { userInfo ->
