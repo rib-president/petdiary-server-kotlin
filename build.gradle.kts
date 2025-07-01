@@ -8,7 +8,7 @@ plugins {
 
     // kotlin jvm으로 kotlin 코드 컴파일
     kotlin("jvm") version "1.9.22"
-    // kotlin annotation processing로 컴파일 시간에 어노테이션 처리
+    // kotlin annotation processing Tool: 컴파일 타임에 어노테이션 기반 코드 자동 생성
     kotlin("kapt") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
     kotlin("plugin.jpa") version "1.9.22"
@@ -53,6 +53,9 @@ subprojects {
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-web")
+
+        implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+        kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
         implementation(kotlin("stdlib"))
 
