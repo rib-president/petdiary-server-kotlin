@@ -1,8 +1,10 @@
 package com.petdiary.userme.controller
 
+import com.petdiary.security.SecurityUser
 import com.petdiary.userme.dto.UserMeResponseDto
 import com.petdiary.userme.service.UserMeService
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -15,7 +17,7 @@ class UserMeController(
 ) {
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    fun getMe(): UserMeResponseDto {
-        return service.getMe()
+    fun getMe(@AuthenticationPrincipal user: SecurityUser): UserMeResponseDto {
+        return service.getMe(user)
     }
 }

@@ -29,5 +29,5 @@ class File(
 
     @Column(name = "size", nullable = false)
     @Comment("파일 크기")
-    val size: Integer
+    val size: Int
 )

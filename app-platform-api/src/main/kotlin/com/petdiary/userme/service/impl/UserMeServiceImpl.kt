@@ -1,5 +1,7 @@
 package com.petdiary.userme.service.impl
 
+import com.petdiary.exception.ApiException
+import com.petdiary.exception.enums.ApiExceptionEnum
 import com.petdiary.security.SecurityUser
 import com.petdiary.userme.dto.UserMeResponseDto
 import com.petdiary.userme.repository.UserMeRepository
@@ -15,14 +17,12 @@ class UserMeServiceImpl(
     private val userMeRepository: UserMeRepository
 ) : UserMeService {
 
-    override fun getMe(): UserMeResponseDto {
-        val currentUser = SecurityContextHolder.getContext().authentication?.principal as? SecurityUser
-            ?: throw RuntimeException("UNAUTHORIZED")
+    override fun getMe(user: SecurityUser): UserMeResponseDto {
 
-        val user = userMeRepository.findBySystemCode(currentUser.username)
-            ?: throw UsernameNotFoundException("User not found")
+        val foundUser = userMeRepository.findBySystemCode(user.username)
+            ?: throw ApiException(ApiExceptionEnum.USER_NOT_FOUND)
 
-        return with(user) {
+        return with(foundUser) {
             UserMeResponseDto(
                 displayName = displayName,
                 emailAddress = emailAddress,

@@ -13,6 +13,6 @@ data class UserMeResponseDto(
         val key: String,
         val location: String,
         val filename: String,
-        val size: Integer
+        val size: Int
     )
 }

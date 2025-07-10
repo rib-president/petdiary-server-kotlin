@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":domain-record"))
     implementation(project(":domain-cms"))
     implementation(project(":domain-system"))
+    implementation(project(":system-core"))
 
     implementation("org.springframework.security:spring-security-core:6.2.4")
     implementation("org.springframework.security:spring-security-web:6.2.4")
