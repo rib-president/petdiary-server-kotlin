@@ -15,7 +15,7 @@ class SecurityUser(
         TODO("Not yet implemented")
     }
 
-    override fun getUsername(): String? {
+    override fun getUsername(): String {
         return this.username
     }
 

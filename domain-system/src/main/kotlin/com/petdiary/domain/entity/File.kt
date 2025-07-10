@@ -25,5 +25,9 @@ class File(
 
     @Column(name = "`key`", length = 128, nullable = false)
     @Comment("파일 식별키")
-    val key: String
+    val key: String,
+
+    @Column(name = "size", nullable = false)
+    @Comment("파일 크기")
+    val size: Integer
 )
