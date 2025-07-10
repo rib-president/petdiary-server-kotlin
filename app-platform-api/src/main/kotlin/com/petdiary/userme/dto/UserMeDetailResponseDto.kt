@@ -2,7 +2,7 @@ package com.petdiary.userme.dto
 
 import com.petdiary.domain.enums.SnsType
 
-data class UserMeResponseDto(
+data class UserMeDetailResponseDto(
     val displayName: String,
     val emailAddress: String?,
     val avatar: Avatar?,

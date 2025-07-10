@@ -15,6 +15,9 @@ dependencies {
     implementation(project(":domain-system"))
     implementation(project(":system-core"))
 
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    kapt("org.hibernate.validator:hibernate-validator")
+
     implementation("org.springframework.security:spring-security-core:6.2.4")
     implementation("org.springframework.security:spring-security-web:6.2.4")
     implementation("org.springframework.security:spring-security-config:6.2.4")
