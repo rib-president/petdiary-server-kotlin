@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.PostMapping
 
 @RestController
 @RequestMapping("/users/me")
@@ -31,5 +32,11 @@ class UserMeController(
     fun updateMe(@AuthenticationPrincipal user: SecurityUser,
                  @RequestBody @Valid dto: UserMeUpdateRequestDto): SuccessResponseDto {
         return service.updateMe(user, dto)
+    }
+
+    @PostMapping("/withdraw")
+    @ResponseStatus(HttpStatus.OK)
+    fun withdrawMe(@AuthenticationPrincipal user: SecurityUser): SuccessResponseDto {
+        return service.withdrawMe(user)
     }
 }

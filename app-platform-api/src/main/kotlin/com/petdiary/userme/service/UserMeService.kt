@@ -9,4 +9,6 @@ interface UserMeService {
     fun getMe(user: SecurityUser): UserMeDetailResponseDto;
 
     fun updateMe(user: SecurityUser, dto: UserMeUpdateRequestDto): SuccessResponseDto
+
+    fun withdrawMe(user: SecurityUser): SuccessResponseDto
 }

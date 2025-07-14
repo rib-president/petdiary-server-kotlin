@@ -62,4 +62,13 @@ class UserMeServiceImpl(
 
         return SuccessResponseDto(success = true)
     }
+
+    override fun withdrawMe(user: SecurityUser): SuccessResponseDto {
+        val foundUser = userMeRepository.findBySystemCode(user.username)
+            ?: throw ApiException(ApiExceptionEnum.USER_NOT_FOUND)
+
+        userMeRepository.delete(foundUser)
+
+        return SuccessResponseDto(success = true)
+    }
 }
