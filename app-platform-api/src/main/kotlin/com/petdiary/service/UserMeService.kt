@@ -1,9 +1,9 @@
-package com.petdiary.userme.service
+package com.petdiary.service
 
 import com.petdiary.client.core.dto.SuccessResponseDto
+import com.petdiary.dto.UserMeDetailResponseDto
+import com.petdiary.dto.UserMeUpdateRequestDto
 import com.petdiary.security.SecurityUser
-import com.petdiary.userme.dto.UserMeDetailResponseDto
-import com.petdiary.userme.dto.UserMeUpdateRequestDto
 
 interface UserMeService {
     fun getMe(user: SecurityUser): UserMeDetailResponseDto;

@@ -29,7 +29,7 @@ class Banner (
 
     @Column(name = "`order`", nullable = false)
     @Comment("배치 순서")
-    var order: Integer,
+    var order: Int,
 
     @Column(name = "link", length = 128)
     @Comment("연결된 링크")

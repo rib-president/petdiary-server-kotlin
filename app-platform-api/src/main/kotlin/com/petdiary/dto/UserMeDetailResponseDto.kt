@@ -1,4 +1,4 @@
-package com.petdiary.userme.dto
+package com.petdiary.dto
 
 import com.petdiary.domain.enums.SnsType
 

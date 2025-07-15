@@ -1,4 +1,4 @@
-package com.petdiary.userme.dto
+package com.petdiary.dto
 
 import jakarta.validation.constraints.NotBlank
 import java.time.LocalDateTime

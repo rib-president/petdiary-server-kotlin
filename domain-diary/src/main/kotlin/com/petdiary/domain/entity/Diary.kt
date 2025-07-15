@@ -44,5 +44,5 @@ class Diary (
 
     @Column(name = "emotion_level")
     @Comment("기분 정도, 1-나쁨 ~ 5-좋음")
-    var emotionLevel: Integer
+    var emotionLevel: Int
 )

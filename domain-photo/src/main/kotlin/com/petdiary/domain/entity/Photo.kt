@@ -46,7 +46,7 @@ class Photo (
     @Column(name = "read_count", nullable = false)
     @ColumnDefault("0")
     @Comment("조회수")
-    var readCount: Integer = 0 as Integer,
+    var readCount: Int = 0,
 
     @Column(name = "is_default", nullable = false)
     @ColumnDefault("0")

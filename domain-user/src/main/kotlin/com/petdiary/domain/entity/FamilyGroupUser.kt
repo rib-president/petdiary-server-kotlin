@@ -43,9 +43,9 @@ class FamilyGroupUser (
 
     @Column(name = "alarm_start_hour")
     @Comment("지정된 알림 시작 시간 0~24")
-    var alarmStartHour: Integer? = null,
+    var alarmStartHour: Int? = null,
 
     @Column(name = "alarm_end_hour")
     @Comment("지정된 알림 끝 시간 0~24")
-    var alarmEndHour: Integer? = null
+    var alarmEndHour: Int? = null
 )

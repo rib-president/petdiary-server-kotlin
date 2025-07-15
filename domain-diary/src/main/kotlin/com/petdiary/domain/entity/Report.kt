@@ -1,6 +1,6 @@
 package com.petdiary.domain.entity
 
-import ReportType
+import com.petdiary.domain.enums.ReportType
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 import org.hibernate.annotations.DynamicInsert

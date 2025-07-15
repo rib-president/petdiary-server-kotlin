@@ -27,9 +27,9 @@ class BannerType (
 
     @Column(name = "width", nullable = false)
     @Comment("가로")
-    var width: Integer,
+    var width: Int,
 
     @Column(name = "height", nullable = false)
     @Comment("높이")
-    var height: Integer
+    var height: Int
 )

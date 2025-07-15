@@ -21,5 +21,5 @@ class Weight (
 
     @Column(name = "measurement", nullable = false)
     @Comment("기록 값(gram)")
-    var measurement: Integer
+    var measurement: Int
 )
