@@ -23,6 +23,12 @@ dependencies {
     implementation("org.springframework.security:spring-security-config:6.2.4")
 
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    // === AWS SDK 관련 의존성 추가 ===
+    implementation(platform("software.amazon.awssdk:bom:2.25.14"))
+    implementation("software.amazon.awssdk:secretsmanager")
+    implementation("software.amazon.awssdk:auth")
+    implementation("software.amazon.awssdk:regions")
 }
 
 tasks.getByName<BootJar>("bootJar") {
