@@ -25,15 +25,15 @@ class FamilyQueryRepositoryImpl(private val queryFactory: JPAQueryFactory): Fami
                 QFamily.family.name,
                 QFamily.family.isDefault,
                 JPAExpressions.select(QUser("superAdmin").displayName)
-                    .from(QUser("superAdmin"))
-                    .innerJoin(QFamilyGroupUser("subGroupUser"))
-                    .on(QFamilyGroupUser("subGroupUser").user.eq(QUser("superAdmin")),
-                        QFamilyGroupUser("subGroupUser").familyGroup.eq(QFamilyGroupUser.familyGroupUser.familyGroup))
-                    .innerJoin(QFamilyGroupUserPermission.familyGroupUserPermission)
-                    .on(QFamilyGroupUserPermission.familyGroupUserPermission.familyGroupUser.eq(QFamilyGroupUser("subGroupUser")))
-                    .innerJoin(QPermission.permission)
-                    .on(QPermission.permission.eq(QFamilyGroupUserPermission.familyGroupUserPermission.permission),
-                        QPermission.permission.name.eq("SUPER-ADMIN")),
+                    .from(QFamily("subFamily"))
+                    .innerJoin(QFamilyGroup.familyGroup)
+                    .on(QFamilyGroup.familyGroup.family.eq(QFamily("subFamily")),
+                        QFamilyGroup.familyGroup.isDefault.eq(true))
+                    .innerJoin(QFamilyGroupUser.familyGroupUser)
+                    .on(QFamilyGroupUser.familyGroupUser.familyGroup.eq(QFamilyGroup.familyGroup))
+                    .innerJoin(QUser("superAdmin"))
+                    .on(QUser("superAdmin").eq(QFamilyGroupUser.familyGroupUser.user))
+                    .where(QFamilyGroup.familyGroup.family.eq(QFamily.family)),
                 QPet.pet.thumbnail.location
             )
         ).from(QFamilyGroupUser.familyGroupUser)
