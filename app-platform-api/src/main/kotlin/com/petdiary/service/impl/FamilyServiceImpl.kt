@@ -2,6 +2,7 @@ package com.petdiary.service.impl
 
 import com.petdiary.client.core.dto.ListResponseDto
 import com.petdiary.domain.repository.UserRepository
+import com.petdiary.dto.FamilyDetailResponseDto
 import com.petdiary.dto.FamilyListResponseDto
 import com.petdiary.exception.ApiException
 import com.petdiary.exception.enums.ApiExceptionEnum
@@ -30,6 +31,23 @@ class FamilyServiceImpl(
             offset = 0,
             limit = items.size,
             items = items
+        )
+    }
+
+    override fun getOne(user: SecurityUser,
+                        familyId: Long): FamilyDetailResponseDto {
+        val foundUser = userRepository.findBySystemCode(user.username)
+            ?: throw ApiException(ApiExceptionEnum.USER_NOT_FOUND)
+
+        val family = foundUser.familyGroupUsers
+            .find { it.familyGroup.family.familyId == familyId }?.familyGroup?.family
+            ?: throw ApiException(ApiExceptionEnum.BAD_REQUEST)
+
+        return FamilyDetailResponseDto(
+            id = family.familyId.toString(),
+            name = family.name,
+            isDefault = family.isDefault,
+            isAllowedReply = family.isAllowedReply
         )
     }
 }

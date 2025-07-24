@@ -59,5 +59,8 @@ class User (
     @ColumnDefault("NOW(6)")
     @UpdateTimestamp
     @Comment("수정일")
-    var updatedDateTime: LocalDateTime? = null
+    var updatedDateTime: LocalDateTime? = null,
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
+    var familyGroupUsers: MutableList<FamilyGroupUser> = mutableListOf()
 )

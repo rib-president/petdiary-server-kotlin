@@ -1,6 +1,7 @@
 package com.petdiary.controller
 
 import com.petdiary.client.core.dto.ListResponseDto
+import com.petdiary.dto.FamilyDetailResponseDto
 import com.petdiary.dto.FamilyListResponseDto
 import com.petdiary.service.FamilyService
 import com.petdiary.security.SecurityUser
@@ -21,5 +22,11 @@ class FamilyController(
     @ResponseStatus(HttpStatus.OK)
     fun getMany(@AuthenticationPrincipal user: SecurityUser): ListResponseDto<FamilyListResponseDto> {
         return service.getMany(user);
+    }
+
+    @GetMapping("/{familyId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getOne(@AuthenticationPrincipal user: SecurityUser, familyId: Long): FamilyDetailResponseDto {
+        return service.getOne(user, familyId)
     }
 }
